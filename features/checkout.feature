@@ -6,12 +6,12 @@ Feature: Checkout process
     # Then "Eine Tüte Luft" title is displayed
      When I click "Eine Tüte Luft" button
     # Then "Für die Bestellung benötigen wir Ihre E-Mail-Adresse" title is displayed
-     When I enter "lizaveta.nikolaevich@gmail.com" for the "Email" field
-    # And I click "weiter" button
+     When I enter "Email" to the "E-Mail-Adresse" field
+     And I click "weiter" button
     # Then "Willkommen" title is displayed
     # And there is a "Password" field
-    # When I enter "qwerty123!" for the "Password" field
-    # And I click "anmelden" button
+     When I enter "password" to the "Passwort" field
+     And I click "anmelden" button
     # Then "CHECK24 Punkte sammeln" title is displayed
     # When I click "Nein, danke." radio-button
     # And I click "weiter" button

@@ -10,6 +10,20 @@ class FeatureContext implements Context
 {
     public $mink;
     public $session;
+    public static $arraySelectors = array(
+        "Eine Tüte Luft" => '[data-gtm-type="checkout"][data-gtm-value="buybox"]',
+        "E-Mail-Adresse" => '#cl_login',
+        "weiter" => '#c24-uli-login-btn',
+        "Passwort" => '#cl_pw_login',
+        "anmelden" => '#c24-uli-pw-btn',
+    );
+
+    public static $testData = array(
+        "Email" => 'lizaveta.nikolaevich@gmail.com',
+        "password" => 'qwerty123!',
+    );
+
+
     /**
      * Initializes context.
      *
@@ -49,22 +63,23 @@ class FeatureContext implements Context
     /**
      * @When I click :arg1 button
      */
-    public function iClickButton($arg1)
+    public function iClickButton($button)
     {
-        $el2 = $this->session->getPage()->find('css', '[data-gtm-type="checkout"][data-gtm-value="buybox"]')->click();
+        $el1 = $this->session->getPage()->find('css', self::$arraySelectors[$button]) ->click();
     }
 
     /**
-     * @When I enter :arg1 for the :arg2 field
+     * @When I enter :arg1 to the :arg2 field
      */
-    public function iEnterForTheField($arg1, $arg2)
+    public function iEnterToTheField($arg1, $arg2)
     {
+        $this->session->wait(2000);
+        $this->session->visit($this->session->getCurrentUrl());
         $this->session->wait(5000);
-        $element = $this->session->getPage()->find('css', '.c24-uli-back-init style-scope unified-login c24-uli-back-browser')->click();
-        //$element->setValue('testtesttestest');
+        $element = $this->session->getPage()->find('css', '#cl_login')->click();
+        $element->setValue('testtesttestest');
+        $this->session->wait(5000);
     }
 }
-
-
 //$node_field = $page->findById('poney-button');
 //$this->assertEquals('poney', $node_field->getValue(), 'ok');
