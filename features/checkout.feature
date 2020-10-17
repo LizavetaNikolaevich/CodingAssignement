@@ -7,7 +7,7 @@ Feature: Checkout process
      When I click "Eine Tüte Luft" button
     # Then "Für die Bestellung benötigen wir Ihre E-Mail-Adresse" title is displayed
      When I enter "lizaveta.nikolaevich@gmail.com" for the "Email" field
-     And I click "weiter" button
+    # And I click "weiter" button
     # Then "Willkommen" title is displayed
     # And there is a "Password" field
     # When I enter "qwerty123!" for the "Password" field
