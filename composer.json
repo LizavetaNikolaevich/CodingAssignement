@@ -1,7 +1,6 @@
 {
     "require-dev": {
         "behat/behat": "^3.7",
-        "behat/mink-extension": "^2.3",
         "dmore/chrome-mink-driver": "^2.7",
         "dmore/behat-chrome-extension": "^1.3"
     }

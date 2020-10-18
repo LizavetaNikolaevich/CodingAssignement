@@ -16,7 +16,8 @@ class FeatureContext implements Context
     public $assertSession;
     public static $arraySelectors = array(
         "Accept" => '.c24-cookie-consent-notice-buttons.clearfix .c24-cookie-consent-button:last-child',
-        "Eine Tüte Luft" => '[data-gtm-type="checkout"][data-gtm-value="buybox"]',
+        "Eine Tüte Luft" => 'h1[class="product-title qa-product-title"]',
+        "zur Kasse" => '[data-gtm-type="checkout"][data-gtm-value="buybox"]',
         "fistWeiter" => '#c24-uli-login-btn',
         "anmelden" => '#c24-uli-pw-btn',
         "secondWeiter" => '#c24-uli-points-btn',
@@ -64,6 +65,8 @@ class FeatureContext implements Context
 
         $this->session = $this->mink->getSession();
         $this->session->start();
+        //$this->session->resizeWindow(375, 667);
+
         $this->assertSession = $this->mink->assertSession();
     }
 
@@ -89,11 +92,20 @@ class FeatureContext implements Context
      */
      public function titleIsDisplayed($locator)
      {
-        $this->assertSession->elementExists('css', self::$arraySelectors[$locator]);  
+        $this->assertSession->elementContains('css', self::$arraySelectors[$locator], $locator);  
      }
 
+        /**
+     * @Then :arg1 page is opened
+     */
+    public function pageIsOpened($link)
+    {
+        $this->session->wait(3000);
+        $this->assertSession->addressEquals($link);  
+    }
+
      /**
-     * @Given I am a Check24 user who hasn't logged in yet
+     * @Given I am a Check24 user
      */
     public function iAmACheckUserWhoHasntLoggedInYet()
     {
