@@ -4,22 +4,21 @@ use Behat\Behat\Context\Context;
 use Behat\Mink\Mink;
 use Behat\Mink\Session;
 use DMore\ChromeDriver\ChromeDriver;
+use Behat\Mink\WebAssert;
 
-require_once 'PHPUnit/Framework/Assert/Functions.php';
+//require_once 'PHPUnit/Framework/Assert/Functions.php';
 
 
 class FeatureContext implements Context
 {
     public $mink;
     public $session;
+    public $assertSession;
     public static $arraySelectors = array(
         "Accept" => '.c24-cookie-consent-notice-buttons.clearfix .c24-cookie-consent-button:last-child',
         "Eine Tüte Luft" => '[data-gtm-type="checkout"][data-gtm-value="buybox"]',
-        "E-Mail-Adresse" => '#cl_login',
         "fistWeiter" => '#c24-uli-login-btn',
-        "Passwort" => '#cl_pw_login',
         "anmelden" => '#c24-uli-pw-btn',
-        "Nein, danke." => '',
         "secondWeiter" => '#c24-uli-points-btn',
         "vorname" => '#address-first-name-billing',
         "Nachname" => '#address-last-name-billing',
@@ -28,6 +27,9 @@ class FeatureContext implements Context
         "Straße" => '[for="address-street-billing"]',
         "Nr" => '[for="address-house-number-billing"]',
         "Telefonnummer" => '[for="address-phone-number-billing"]',
+        "Checkout" => '.submit-btn',
+        "Card" => '#c24-sps-number',
+        "CardName" => '#c24-sps-name'
     );
 
     public static $testData = array(
@@ -40,6 +42,8 @@ class FeatureContext implements Context
         "road" => 'Krasnaya',
         "No." => '11',
         "Phone number" => '5402293',
+        "Card Number" => '5555555555554444',
+        "Card Name" => 'test'
     );
 
 
@@ -60,14 +64,7 @@ class FeatureContext implements Context
 
         $this->session = $this->mink->getSession();
         $this->session->start();
-    }
-
- /**
-     * @Given I am a Check24 user who hasn't logged in yet
-     */
-    public function iAmACheckUserWhoHasntLoggedInYet()
-    {
-        #throw new PendingException();
+        $this->assertSession = $this->mink->assertSession();
     }
 
     /**
@@ -76,6 +73,7 @@ class FeatureContext implements Context
     public function iGoTo($arg1)
     {
         $this->session->visit($arg1);
+        $this->session->setCookie('c24session', '2cb36f368b72f4292f8cd56a583d47d5');
     }
 
     /**
@@ -89,22 +87,39 @@ class FeatureContext implements Context
         /**
      * @Then :arg1 title is displayed
      */
-    public function titleIsDisplayed($arg1)
+     public function titleIsDisplayed($locator)
+     {
+        $this->assertSession->elementExists('css', self::$arraySelectors[$locator]);  
+     }
+
+     /**
+     * @Given I am a Check24 user who hasn't logged in yet
+     */
+    public function iAmACheckUserWhoHasntLoggedInYet()
     {
-        \PHPUnit\Framework\Assert::assertEquals('heh2', 'heh');
     }
- 
     /**
      * @When I enter :arg1 to the :arg2 field
      */
     public function iEnterToTheField($data, $locator)
     {
-        print($this->session->getCurrentUrl());
-        $this->getSession()->reload();
-
-        $element = $this->session->getPage()->find('css', self::$arraySelectors[$locator])->click();
+        $this->session->wait(10000, "document.querySelector('".self::$arraySelectors[$locator]."') !== null");
+        $element = $this->session->getPage()->find('css', self::$arraySelectors[$locator]);
         $element->setValue(self::$testData[$data]);
     }
+
+        /**
+     * @When I enter :arg1 to the :arg2 iframe field
+     */
+    public function iEnterToTheIframeField($data, $locator)
+    {
+        $this->session->wait(10000, "document.querySelector('".self::$arraySelectors[$locator]."') !== null");
+        print("document.querySelector('".self::$arraySelectors[$locator]."').value = '".self::$testData[$data]."'");
+        $this->session->evaluateScript(
+         "document.querySelector('".self::$arraySelectors[$locator]."').value = '".self::$testData[$data]."'"
+        );
+    }
+
 }
 //$node_field = $page->findById('poney-button');
 //$this->assertEquals('poney', $node_field->getValue(), 'ok');
