@@ -102,14 +102,15 @@ class FeatureContext implements Context
         $el1 = $this->session->getPage()->find('css', self::$arraySelectors[$locator]) ->click();
     }
 
-        /**
+    /**
      * @Then :arg1 title is displayed
      */
      public function titleIsDisplayed($locator)
      {
         $this->assertSession->elementContains('css', self::$arraySelectors[$locator], $locator);  
      }
-        /**
+
+    /**
      * @Then :arg1 contains :arg2 product from the basket
      */
     public function containsProductFromTheBasket($locator1, $locator2)
@@ -117,7 +118,7 @@ class FeatureContext implements Context
        $this->assertSession->elementContains('css', self::$arraySelectors[$locator1], $locator2);  
     }
 
-        /**
+    /**
      * @Then :arg1 page is opened
      */
     public function pageIsOpened($link)
@@ -126,12 +127,6 @@ class FeatureContext implements Context
         $this->assertSession->addressEquals($link);  
     }
 
-     /**
-     * @Given I am a Check24 user
-     */
-    public function iAmACheckUserWhoHasntLoggedInYet()
-    {
-    }
     /**
      * @When I enter :arg1 to the :arg2 field
      */
@@ -142,8 +137,6 @@ class FeatureContext implements Context
         $element->focus();
         $element->setValue(self::$testData[$data]);
         $this->session->wait(1000);
-        # $element->blur();
+        $element->blur();
     }
 }
-//$node_field = $page->findById('poney-button');
-//$this->assertEquals('poney', $node_field->getValue(), 'ok');
