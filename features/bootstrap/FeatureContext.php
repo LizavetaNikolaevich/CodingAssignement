@@ -21,16 +21,17 @@ class FeatureContext implements Context
         "fistWeiter" => '#c24-uli-login-btn',
         "anmelden" => '#c24-uli-pw-btn',
         "secondWeiter" => '#c24-uli-points-btn',
+        "MaleSelectOption" => "[for='address-male-title-billing']",
+        "FemaleSelectOption" => "[for='address-female-title-billing']",
         "vorname" => '#address-first-name-billing',
         "Nachname" => '#address-last-name-billing',
-        "PLZ" => ' #address-po-number-billing',
-        "Ort" => '[for="address-city-billing"]',
-        "Straße" => '[for="address-street-billing"]',
-        "Nr" => '[for="address-house-number-billing"]',
-        "Telefonnummer" => '[for="address-phone-number-billing"]',
+        "PLZ" => '#address-po-number-billing',
+        "Ort" => '#address-city-billing',
+        "Straße" => '#address-street-billing',
+        "Nr" => '#address-house-number-billing',
+        "Telefonnummer" => '#address-phone-number-billing',
         "Checkout" => '.submit-btn',
-        "Card" => '#c24-sps-number',
-        "CardName" => '#c24-sps-name'
+        "Article overview" => '#module-order-positions .item__name'
     );
 
     public static $testData = array(
@@ -38,13 +39,11 @@ class FeatureContext implements Context
         "password" => 'qwerty123!',
         "First Name" => 'Liza',
         "Surname" => 'Nikolaevich',
-        "Postcode" => '74232',
+        "Postcode" => '20095',
         "place" => 'Minsk',
-        "road" => 'Krasnaya',
+        "road" => 'Hamburg Krasnaya',
         "No." => '11',
-        "Phone number" => '5402293',
-        "Card Number" => '5555555555554444',
-        "Card Name" => 'test'
+        "Phone number" => '+49296976131',
     );
 
 
@@ -65,8 +64,6 @@ class FeatureContext implements Context
 
         $this->session = $this->mink->getSession();
         $this->session->start();
-        //$this->session->resizeWindow(375, 667);
-
         $this->assertSession = $this->mink->assertSession();
     }
 
@@ -76,7 +73,25 @@ class FeatureContext implements Context
     public function iGoTo($arg1)
     {
         $this->session->visit($arg1);
-        $this->session->setCookie('c24session', '2cb36f368b72f4292f8cd56a583d47d5');
+        //$this->session->setCookie('c24session', '2cb36f368b72f4292f8cd56a583d47d5');
+    }
+
+    /**
+     * @Given I am a Check24 user with :arg1 screen
+     */
+    public function iAmACheckUserWithMobileScreen($arg1)
+    {
+        if ($arg1 === 'mobile') {
+            $this->session->resizeWindow(375, 667);
+        }
+    }
+
+    /**
+     * @When I wait
+     */
+    public function iWait()
+    {
+        $this->session->wait(20000);
     }
 
     /**
@@ -94,6 +109,13 @@ class FeatureContext implements Context
      {
         $this->assertSession->elementContains('css', self::$arraySelectors[$locator], $locator);  
      }
+        /**
+     * @Then :arg1 contains :arg2 product from the basket
+     */
+    public function containsProductFromTheBasket($locator1, $locator2)
+    {
+       $this->assertSession->elementContains('css', self::$arraySelectors[$locator1], $locator2);  
+    }
 
         /**
      * @Then :arg1 page is opened
@@ -117,21 +139,11 @@ class FeatureContext implements Context
     {
         $this->session->wait(10000, "document.querySelector('".self::$arraySelectors[$locator]."') !== null");
         $element = $this->session->getPage()->find('css', self::$arraySelectors[$locator]);
+        $element->focus();
         $element->setValue(self::$testData[$data]);
+        $this->session->wait(1000);
+        # $element->blur();
     }
-
-        /**
-     * @When I enter :arg1 to the :arg2 iframe field
-     */
-    public function iEnterToTheIframeField($data, $locator)
-    {
-        $this->session->wait(10000, "document.querySelector('".self::$arraySelectors[$locator]."') !== null");
-        print("document.querySelector('".self::$arraySelectors[$locator]."').value = '".self::$testData[$data]."'");
-        $this->session->evaluateScript(
-         "document.querySelector('".self::$arraySelectors[$locator]."').value = '".self::$testData[$data]."'"
-        );
-    }
-
 }
 //$node_field = $page->findById('poney-button');
 //$this->assertEquals('poney', $node_field->getValue(), 'ok');
