@@ -4,6 +4,7 @@ Feature: Checkout process
   Scenario: 
     Given I am a Check24 user with "web" screen
     When I go to "https://preisvergleich.check24.de/testprodukte-spedition/eine-tuete-luft.html"
+    Then "eine-tuete-luft.html" page is opened
     Then "Eine Tüte Luft" title is displayed
     When I click "Accept" button
     When I click "zur Kasse" button
