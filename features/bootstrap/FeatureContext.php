@@ -6,7 +6,6 @@ use Behat\Mink\Session;
 use DMore\ChromeDriver\ChromeDriver;
 use Behat\Mink\WebAssert;
 
-//require_once 'PHPUnit/Framework/Assert/Functions.php';
 
 
 class FeatureContext implements Context
@@ -43,10 +42,9 @@ class FeatureContext implements Context
         "place" => 'Minsk',
         "road" => 'Hamburg Krasnaya',
         "No." => '11',
-        "Phone number" => '+49296976131',
+        "Phone number" => '2969761',
     );
-
-
+    
     /**
      * Initializes context.
      *
@@ -57,7 +55,7 @@ class FeatureContext implements Context
     public function __construct()
     {
         $this->mink = new Mink(array(
-            'browser' => new Session(new ChromeDriver('http://localhost:9222', null, 'http://www.google.com'))
+            'browser' => new Session(new ChromeDriver('http://localhost:9222', null, 'https://shopping.check24.de/'))
         ));
     
         $this->mink->setDefaultSessionName('browser');
@@ -86,14 +84,6 @@ class FeatureContext implements Context
     }
 
     /**
-     * @When I wait
-     */
-    public function iWait()
-    {
-        $this->session->wait(20000);
-    }
-
-    /**
      * @When I click :arg1 button
      */
     public function iClickButton($locator)
@@ -114,6 +104,7 @@ class FeatureContext implements Context
      */
     public function containsProductFromTheBasket($locator1, $locator2)
     {
+        $this->session->wait(3000);
        $this->assertSession->elementContains('css', self::$arraySelectors[$locator1], $locator2);  
     }
 
@@ -123,7 +114,7 @@ class FeatureContext implements Context
     public function pageIsOpened($link)
     {
         $this->session->wait(3000);
-        $this->assertSession->addressEquals($link);  
+        $this->assertSession->addressMatches("|".preg_quote($link, "|")."|");  
     }
 
     /**
