@@ -16,9 +16,8 @@ Feature: Checkout process
     And I enter "road" to the "Straße" field
     And I enter "No." to the "Nr" field
     And I enter "Phone number" to the "Telefonnummer" field
-    #When I click "Checkout" button
-    #Then "https://shopping.check24.de/pay" page is opened
-    And I wait 
+    When I click "Checkout" button
+    Then "https://shopping.check24.de/pay" page is opened
 
     Scenario: 
     Given I am a Check24 user with "mobile" screen
@@ -36,6 +35,5 @@ Feature: Checkout process
     And I enter "road" to the "Straße" field
     And I enter "No." to the "Nr" field
     And I enter "Phone number" to the "Telefonnummer" field
-    #When I click "Checkout" button
-    #Then "https://shopping.check24.de/pay" page is opened
-    And I wait 
+    When I click "Checkout" button
+    Then "https://shopping.check24.de/pay" page is opened

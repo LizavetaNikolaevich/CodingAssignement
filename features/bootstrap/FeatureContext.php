@@ -73,7 +73,6 @@ class FeatureContext implements Context
     public function iGoTo($arg1)
     {
         $this->session->visit($arg1);
-        //$this->session->setCookie('c24session', '2cb36f368b72f4292f8cd56a583d47d5');
     }
 
     /**
