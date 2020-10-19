@@ -104,7 +104,7 @@ class FeatureContext implements Context
      */
     public function containsProductFromTheBasket($locator1, $locator2)
     {
-        $this->session->wait(3000);
+       $this->session->wait(10000, "document.querySelector('".self::$arraySelectors[$locator1]."') !== null");;
        $this->assertSession->elementContains('css', self::$arraySelectors[$locator1], $locator2);  
     }
 
@@ -126,7 +126,6 @@ class FeatureContext implements Context
         $element = $this->session->getPage()->find('css', self::$arraySelectors[$locator]);
         $element->focus();
         $element->setValue(self::$testData[$data]);
-        $this->session->wait(1000);
         $element->blur();
     }
 }
